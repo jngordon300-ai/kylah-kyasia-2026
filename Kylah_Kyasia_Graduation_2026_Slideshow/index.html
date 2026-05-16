@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kylah &amp; Kyasia Durell — Class of 2026</title>
+<style>
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:#000; overflow:hidden; }
+
+  #main-video {
+    position:fixed; inset:0; width:100%; height:100%;
+    object-fit:contain; background:#000;
+  }
+  #shield { position:fixed; inset:0; z-index:10; cursor:none; }
+  #grain {
+    position:fixed; inset:0; z-index:11; pointer-events:none; opacity:0.025;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  #hud { position:fixed; inset:0; z-index:20; opacity:0; transition:opacity 0.4s ease; pointer-events:none; }
+  body:hover #hud { opacity:1; }
+  #top-bar {
+    position:absolute; top:0; left:0; right:0; height:68px;
+    background:linear-gradient(to bottom, rgba(0,0,0,0.75), transparent);
+    display:flex; align-items:center; padding:0 1.8rem; gap:0.55rem; pointer-events:auto;
+  }
+  .btn {
+    background:rgba(0,0,0,0.6); border:1px solid rgba(201,168,76,0.4); color:#C9A84C;
+    font-family:Georgia,serif; font-size:0.7rem; letter-spacing:0.15em;
+    padding:0.4rem 0.9rem; cursor:pointer; border-radius:3px;
+    transition:background 0.2s; white-space:nowrap; backdrop-filter:blur(8px);
+  }
+  .btn:hover { background:rgba(201,168,76,0.18); border-color:#C9A84C; }
+  #vol-wrap { display:flex; align-items:center; gap:0.5rem; margin-left:0.3rem; }
+  #vol-label { color:rgba(201,168,76,0.6); font-family:Georgia,serif; font-size:0.58rem; letter-spacing:0.2em; }
+  #vol { -webkit-appearance:none; appearance:none; width:80px; height:2px; background:rgba(201,168,76,0.25); outline:none; cursor:pointer; border-radius:1px; }
+  #vol::-webkit-slider-thumb { -webkit-appearance:none; width:11px; height:11px; border-radius:50%; background:#C9A84C; cursor:pointer; }
+  #time-disp { color:rgba(255,255,255,0.38); font-family:Georgia,serif; font-size:0.6rem; letter-spacing:0.1em; margin-left:auto; }
+  #prog-wrap { position:absolute; bottom:0; left:0; right:0; height:3px; background:rgba(255,255,255,0.1); cursor:pointer; pointer-events:auto; }
+  #prog-fill { height:100%; background:linear-gradient(to right, #C0392B, #C9A84C); width:0%; transition:width 0.5s linear; pointer-events:none; }
+  #bot-bar {
+    position:absolute; bottom:4px; left:0; right:0; height:54px;
+    background:linear-gradient(to top, rgba(0,0,0,0.75), transparent);
+    display:flex; align-items:flex-end; justify-content:space-between;
+    padding:0 1.8rem 0.65rem; pointer-events:none;
+  }
+  .cred { font-family:Georgia,serif; font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; }
+  .cred.l { color:#C0392B; } .cred.r { color:#C9A84C; }
+  .cred.c { font-style:italic; letter-spacing:0.07em; text-transform:none; color:rgba(255,255,255,0.32); font-size:0.62rem; }
+  #loop-badge {
+    position:fixed; top:1rem; right:1.5rem; z-index:20;
+    background:rgba(0,0,0,0.55); border:1px solid rgba(201,168,76,0.2);
+    color:rgba(201,168,76,0.5); font-family:Georgia,serif; font-size:0.55rem; letter-spacing:0.2em;
+    padding:0.28rem 0.75rem; border-radius:100px; pointer-events:none; opacity:0; transition:opacity 0.4s;
+    backdrop-filter:blur(6px);
+  }
+  body:hover #loop-badge { opacity:1; }
+  #fs-hint { position:fixed; bottom:1rem; right:1.5rem; z-index:20; color:rgba(255,255,255,0.18); font-family:Georgia,serif; font-size:0.58rem; letter-spacing:0.15em; pointer-events:none; opacity:0; transition:opacity 0.4s; }
+  body:hover #fs-hint { opacity:1; }
+</style>
+</head>
+<body>
+
+<video id="main-video" autoplay loop muted playsinline preload="auto">
+  <source src="video.mp4" type="video/mp4">
+</video>
+
+<div id="shield"></div>
+<div id="grain"></div>
+
+<div id="hud">
+  <div id="top-bar">
+    <button class="btn" id="btn-play">&#9646;&#9646; Pause</button>
+    <button class="btn" id="btn-restart">&#8635; Restart</button>
+    <button class="btn" id="btn-mute">&#128266; Unmute</button>
+    <button class="btn" id="btn-fs">&#x26F6; Fullscreen</button>
+    <div id="vol-wrap">
+      <span id="vol-label">VOL</span>
+      <input type="range" id="vol" min="0" max="1" step="0.02" value="0.9">
+    </div>
+    <span id="time-disp">0:00 / 0:00</span>
+  </div>
+  <div id="prog-wrap"><div id="prog-fill"></div></div>
+  <div id="bot-bar">
+    <span class="cred l">Kylah &middot; Rutgers &middot; Mechanical Engineering</span>
+    <span class="cred c">&#9834;&nbsp; Ribbon in the Sky &mdash; Stevie Wonder</span>
+    <span class="cred r">Kyasia &middot; Rowan &middot; Psychology</span>
+  </div>
+</div>
+
+<div id="loop-badge">&#8635;&nbsp; LOOPING</div>
+<div id="fs-hint">F &mdash; FULLSCREEN</div>
+
+<script>
+var video=document.getElementById('main-video'),fill=document.getElementById('prog-fill'),
+    timeDis=document.getElementById('time-disp'),volIn=document.getElementById('vol'),
+    btnPlay=document.getElementById('btn-play'),btnMute=document.getElementById('btn-mute'),
+    progWrap=document.getElementById('prog-wrap'),btnFs=document.getElementById('btn-fs');
+video.muted=true; video.volume=0.9;
+function fmt(s){var m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
+video.addEventListener('timeupdate',function(){if(video.duration){fill.style.width=(video.currentTime/video.duration*100)+'%';timeDis.textContent=fmt(video.currentTime)+' / '+fmt(video.duration);}});
+progWrap.addEventListener('click',function(e){var r=progWrap.getBoundingClientRect();video.currentTime=((e.clientX-r.left)/r.width)*video.duration;});
+btnPlay.addEventListener('click',function(){if(video.paused){video.play();this.innerHTML='&#9646;&#9646; Pause';}else{video.pause();this.innerHTML='&#9654; Play';}});
+document.getElementById('btn-restart').addEventListener('click',function(){video.currentTime=0;video.play();btnPlay.innerHTML='&#9646;&#9646; Pause';});
+btnMute.addEventListener('click',function(){video.muted=!video.muted;this.innerHTML=video.muted?'&#128266; Unmute':'&#128263; Mute';});
+volIn.addEventListener('input',function(){video.volume=parseFloat(this.value);if(video.muted){video.muted=false;btnMute.innerHTML='&#128263; Mute';}});
+btnFs.addEventListener('click',function(){if(!document.fullscreenElement){document.documentElement.requestFullscreen().catch(function(){});this.innerHTML='&#x2715; Exit Full';}else{document.exitFullscreen();this.innerHTML='&#x26F6; Fullscreen';}});
+document.getElementById('shield').addEventListener('click',function(){btnPlay.click();});
+document.addEventListener('click',function(){if(video.muted){video.muted=false;btnMute.innerHTML='&#128263; Mute';}},{once:true});
+document.addEventListener('keydown',function(e){if(e.key===' '||e.key==='p'||e.key==='P'){e.preventDefault();btnPlay.click();}if(e.key==='m'||e.key==='M')btnMute.click();if(e.key==='f'||e.key==='F')btnFs.click();if(e.key==='ArrowRight')video.currentTime=Math.min(video.duration,video.currentTime+10);if(e.key==='ArrowLeft')video.currentTime=Math.max(0,video.currentTime-10);});
+</script>
+</body>
+</html>
